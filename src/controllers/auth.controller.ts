@@ -4,7 +4,7 @@ import { User } from '../models/user.model';
 import { generateToken } from '../utils/jwt';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body;
+  const { fullname, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -13,7 +13,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, password: hashedPassword });
+    const user = await User.create({ fullname, email, password: hashedPassword });
 
     const token = generateToken(user._id.toString());
     res.status(201).json({ token });
