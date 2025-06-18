@@ -3,9 +3,16 @@ import { AuthRequest } from '../middleware/auth.middleware';
 import { Task } from '../models/task.model';
 
 export const createTask = async (req: AuthRequest, res: Response) => {
-  const { title, description } = req.body;
+  const { title, description, category, priority, dueDate } = req.body;
   try {
-    const task = await Task.create({ title, description, userId: req.user._id });
+    const task = await Task.create({ 
+      title, 
+      description, 
+      category, 
+      priority, 
+      dueDate, 
+      userId: req.user._id 
+    });
     res.status(201).json(task);
   } catch (err) {
     res.status(500).json({ message: 'Server error', err });
