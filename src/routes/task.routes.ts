@@ -5,6 +5,7 @@ import {
   updateTask,
   deleteTask,
   toggleFavorite,
+  toggleComplete,
 } from '../controllers/task.controller';
 import { protect } from '../middleware/auth.middleware';
 
@@ -17,5 +18,6 @@ router.get('/', getTasks);
 router.put('/:id', updateTask);
 router.delete('/:id', deleteTask);
 router.patch('/:id/favorite', toggleFavorite);
+router.patch('/:id/complete', toggleComplete);
 
 export default router;
