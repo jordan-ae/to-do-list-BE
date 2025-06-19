@@ -118,3 +118,5 @@ src/
 ---
 
 This documentation should help you set up, run, and deploy the project successfully. Let me know if you need further assistance!
+
+[➡️ Frontend Repo (Angular)](https://github.com/jordan-ae/todo-fe)
