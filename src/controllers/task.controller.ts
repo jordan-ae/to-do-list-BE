@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { Task } from '../models/task.model';
+import mongoose from 'mongoose';
 
 export const createTask = async (req: AuthRequest, res: Response) => {
-  const { title, description, category, priority, dueDate } = req.body;
+  const { id, title, description, category, priority, dueDate } = req.body;
   try {
     const task = await Task.create({ 
+      _id: id,
       title, 
       description, 
       category, 
@@ -33,6 +35,7 @@ export const getTasks = async (req: AuthRequest, res: Response) => {
 
 export const updateTask = async (req: AuthRequest, res: Response): Promise<void> => {
   const { id } = req.params;
+
   try {
     const task = await Task.findOneAndUpdate(
       { _id: id, userId: req.user._id },
@@ -64,6 +67,20 @@ export const toggleFavorite = async (req: AuthRequest, res: Response): Promise<v
     if (!task) return void res.status(404).json({ message: 'Task not found' });
 
     task.isFavorite = !task.isFavorite;
+    await task.save();
+    res.status(200).json(task);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', err });
+  }
+};
+
+export const toggleComplete = async (req: AuthRequest, res: Response): Promise<void> => {
+  const { id } = req.params;
+  try {
+    const task = await Task.findOne({ _id: id, userId: req.user._id });
+    if (!task) return void res.status(404).json({ message: 'Task not found' });
+
+    task.isCompleted = !task.isCompleted;
     await task.save();
     res.status(200).json(task);
   } catch (err) {
